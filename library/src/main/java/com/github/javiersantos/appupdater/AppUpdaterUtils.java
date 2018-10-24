@@ -23,8 +23,8 @@ public class AppUpdaterUtils {
          * onFailed method called if it can't retrieve the latest version
          *
          * @param update            object with the latest update information: version and url to download
-         * @see com.github.javiersantos.appupdater.objects.Update
          * @param isUpdateAvailable compare installed version with the latest one
+         * @see com.github.javiersantos.appupdater.objects.Update
          */
         void onSuccess(Update update, Boolean isUpdateAvailable);
 
@@ -127,7 +127,7 @@ public class AppUpdaterUtils {
      * Execute AppUpdaterUtils in background.
      */
     public void start() {
-        latestAppVersion = new UtilsAsync.LatestAppVersion(context, true, updateFrom, gitHub, xmlOrJSONUrl, new AppUpdater.LibraryListener() {
+        latestAppVersion = new UtilsAsync.LatestAppVersion(context, true, false, updateFrom, gitHub, xmlOrJSONUrl, new AppUpdater.LibraryListener() {
             @Override
             public void onSuccess(Update update) {
                 Update installedUpdate = new Update(UtilsLibrary.getAppInstalledVersion(context), UtilsLibrary.getAppInstalledVersionCode(context));

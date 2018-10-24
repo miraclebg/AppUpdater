@@ -28,6 +28,10 @@ public class AppUpdater implements IAppUpdater {
     private GitHub gitHub;
     private String xmlOrJsonUrl;
     private Integer showEvery;
+    /**
+     *
+     */
+    private int dialogTheme;
     private Boolean showAppUpdated;
     private String titleUpdate, descriptionUpdate, btnDismiss, btnUpdate, btnDisable; // Update available
     private String titleNoUpdate, descriptionNoUpdate; // Update not available
@@ -38,6 +42,8 @@ public class AppUpdater implements IAppUpdater {
     private AlertDialog alertDialog;
     private Snackbar snackbar;
     private Boolean isDialogCancelable;
+
+    private Boolean forceShow;
 
     public AppUpdater(Context context) {
         this.context = context;
@@ -88,12 +94,21 @@ public class AppUpdater implements IAppUpdater {
         return this;
     }
 
+    public AppUpdater setForceShow(boolean forceShow) {
+        this.forceShow = forceShow;
+        return this;
+    }
+
     @Override
     public AppUpdater setUpdateJSON(@NonNull String jsonUrl) {
         this.xmlOrJsonUrl = jsonUrl;
         return this;
     }
 
+    public AppUpdater setDialogTheme(int theme) {
+        dialogTheme = theme;
+        return this;
+    }
 
     @Override
     public AppUpdater showEvery(Integer times) {
@@ -327,7 +342,7 @@ public class AppUpdater implements IAppUpdater {
 
     @Override
     public void start() {
-        latestAppVersion = new UtilsAsync.LatestAppVersion(context, false, updateFrom, gitHub, xmlOrJsonUrl, new LibraryListener() {
+        latestAppVersion = new UtilsAsync.LatestAppVersion(context, false, forceShow, updateFrom, gitHub, xmlOrJsonUrl, new LibraryListener() {
             @Override
             public void onSuccess(Update update) {
                 if (context instanceof Activity && ((Activity) context).isFinishing()) {
@@ -343,7 +358,7 @@ public class AppUpdater implements IAppUpdater {
                                 final DialogInterface.OnClickListener updateClickListener = btnUpdateClickListener == null ? new UpdateClickListener(context, updateFrom, update.getUrlToDownload()) : btnUpdateClickListener;
                                 final DialogInterface.OnClickListener disableClickListener = btnDisableClickListener == null ? new DisableClickListener(context) : btnDisableClickListener;
 
-                                alertDialog = UtilsDisplay.showUpdateAvailableDialog(context, titleUpdate, getDescriptionUpdate(context, update, Display.DIALOG), btnDismiss, btnUpdate, btnDisable, updateClickListener, btnDismissClickListener, disableClickListener);
+                                alertDialog = UtilsDisplay.showUpdateAvailableDialog(context, titleUpdate, getDescriptionUpdate(context, update, Display.DIALOG), btnDismiss, btnUpdate, btnDisable, updateClickListener, btnDismissClickListener, disableClickListener, dialogTheme);
                                 alertDialog.setCancelable(isDialogCancelable);
                                 alertDialog.show();
                                 break;

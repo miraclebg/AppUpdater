@@ -21,11 +21,14 @@ class UtilsAsync {
         private String xmlOrJsonUrl;
         private AppUpdater.LibraryListener listener;
 
-        public LatestAppVersion(Context context, Boolean fromUtils, UpdateFrom updateFrom, GitHub gitHub, String xmlOrJsonUrl, AppUpdater.LibraryListener listener) {
+        private boolean forceShow;
+
+        public LatestAppVersion(Context context, Boolean fromUtils, Boolean forceShow, UpdateFrom updateFrom, GitHub gitHub, String xmlOrJsonUrl, AppUpdater.LibraryListener listener) {
             this.contextRef = new WeakReference<>(context);
             this.libraryPreferences = new LibraryPreferences(context);
             this.fromUtils = fromUtils;
             this.updateFrom = updateFrom;
+            this.forceShow = forceShow;
             this.gitHub = gitHub;
             this.xmlOrJsonUrl = xmlOrJsonUrl;
             this.listener = listener;
@@ -39,7 +42,7 @@ class UtilsAsync {
             if (context == null || listener == null) {
                 cancel(true);
             } else if (UtilsLibrary.isNetworkAvailable(context)) {
-                if (!fromUtils && !libraryPreferences.getAppUpdaterShow()) {
+                if (!forceShow && !fromUtils && !libraryPreferences.getAppUpdaterShow()) {
                     cancel(true);
                 } else {
                     if (updateFrom == UpdateFrom.GITHUB && !GitHub.isGitHubValid(gitHub)) {
@@ -70,7 +73,7 @@ class UtilsAsync {
                         return update;
                     } else {
                         AppUpdaterError error = updateFrom == UpdateFrom.XML ? AppUpdaterError.XML_ERROR
-                                                                             : AppUpdaterError.JSON_ERROR;
+                                : AppUpdaterError.JSON_ERROR;
 
                         if (listener != null) {
                             listener.onFailed(error);

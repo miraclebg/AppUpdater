@@ -18,8 +18,8 @@ import java.net.URL;
 
 class UtilsDisplay {
 
-    static AlertDialog showUpdateAvailableDialog(final Context context, String title, String content, String btnNegative, String btnPositive, String btnNeutral, final DialogInterface.OnClickListener updateClickListener, final DialogInterface.OnClickListener dismissClickListener, final DialogInterface.OnClickListener disableClickListener) {
-        return new AlertDialog.Builder(context)
+    static AlertDialog showUpdateAvailableDialog(final Context context, String title, String content, String btnNegative, String btnPositive, String btnNeutral, final DialogInterface.OnClickListener updateClickListener, final DialogInterface.OnClickListener dismissClickListener, final DialogInterface.OnClickListener disableClickListener, int theme) {
+        return new AlertDialog.Builder(context, theme)
                 .setTitle(title)
                 .setMessage(content)
                 .setPositiveButton(btnPositive, updateClickListener)
